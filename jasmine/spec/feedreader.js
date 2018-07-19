@@ -46,7 +46,7 @@ $(function() {
          */
         it('deve ter um nome definido em cada feed', function() {
             allFeeds.forEach(function(feed) {
-                expect(feed.name). toBeDefined();
+                expect(feed.name).toBeDefined();
                 expect(feed.name).toMatch(/[a-z]+/i);
             });
         });
