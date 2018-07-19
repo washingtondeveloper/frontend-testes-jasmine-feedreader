@@ -28,104 +28,92 @@ $(function() {
         });
 
 
-        /* TODO: Write a test that loops through each feed
-         * in the allFeeds object and ensures it has a URL defined
-         * and that the URL is not empty.
+        /* TODO: Deve escrever um teste que garanta
+         * que o URL foi definido e que não esteja vazio.
          */
         it('deve ter url definida em cada feed', function() {
             const urlPattern = new RegExp(/^(https?):\/\/([a-zA-Z0-9_-]+)(\.[a-zA-Z0-9_-]+)+(\/[a-zA-Z0-9_-]+)*\/?$/gi);
 
             allFeeds.forEach(function(feed) {
                 expect(feed.url).toMatch(urlPattern);
-                expect(feed.url).toBeTruthy();
+                expect(feed.url).toMatch(/[a-z]+/);
             });
         });
 
 
-        /* TODO: Write a test that loops through each feed
-         * in the allFeeds object and ensures it has a name defined
-         * and that the name is not empty.
+        /* TODO: Deve escrever um teste que garanta
+         * que o Name foi definido e que não esteja vazio.
          */
         it('deve ter um nome definido em cada feed', function() {
-
-            const nomeEsperados = [ 
-                'Udacity Blog', 
-                'CSS Tricks', 
-                'HTML5 Rocks',
-                'Linear Digressions'
-            ]
-            
             allFeeds.forEach(function(feed) {
-                expect(feed.name).toEqual(nomeEsperados.find(es => es == feed.name));
-                expect(feed.name).toBeTruthy();
+                expect(feed.name).toMatch(/[a-z]+/i);
             });
         });
     });
 
 
-    /* TODO: Write a new test suite named "The menu" */
+    /* TODO: Escrever um novo Suite de Teste com nome 'O menu' */
     describe('O menu', function() {
 
-        /* TODO: Write a test that ensures the menu element is
-         * hidden by default. You'll have to analyze the HTML and
-         * the CSS to determine how we're performing the
-         * hiding/showing of the menu element.
+        /**
+         * TODO: Escrever um teste que vefique que o menu se econtra
+         * escondido por padrão
          */
         it('deve verificar se o menu esta oculto por padrão', function() {
-            expect($('body').attr('class')).toEqual('menu-hidden');
+            expect($('body').hasClass('menu-hidden')).toBe(true);
         });
 
-         /* TODO: Write a test that ensures the menu changes
-          * visibility when the menu icon is clicked. This test
-          * should have two expectations: does the menu display when
-          * clicked and does it hide when clicked again.
+         /** TODO: Escrever um teste que garanta as seguintes mudanças do menu, 
+          * quando o ícone do menu é clicado. Esse teste
+          * deve ter duas expectativas: o menu exibe quando
+          * clicou e esconde quando clicado novamente
           */
         it('deve verificar se o menu se esconde quando clica e se esconde quando clica', function() {
             
             $('div.header a.menu-icon-link').click();
-            expect($('body').attr('class')).toEqual('');
+            expect($('body').hasClass('menu-hidden')).toBe(false);
 
             $('div.header a.menu-icon-link').click();
-            expect($('body').attr('class')).toEqual('menu-hidden');
+            expect($('body').hasClass('menu-hidden')).toBe(true);
         });
     });
 
-    /* TODO: Write a new test suite named "Initial Entries" */
+    /* TODO: Escrever um novo suite de teste com nome 'Entradas iniciais' */
     describe('Entradas iniciais', function() {
 
         beforeEach(function(done) {
-            loadFeed(0, function() {
-                done();
-            });
+            loadFeed(0, done);
         })   
 
-        /* TODO: Write a test that ensures when the loadFeed
-         * function is called and completes its work, there is at least
-         * a single .entry element within the .feed container.
-         * Remember, loadFeed() is asynchronous so this test will require
-         * the use of Jasmine's beforeEach and asynchronous done() function.
+        /** TODO: Escreva um teste que quando a função loadFeed() for chamada, verificar
+         * se um elemento(com a classe '.entry') esta disponivel dentro do container '.feed'.
          */
         it('deve garantir que a tela seja carregada e verificar se o carregamento de apenas um elemento esta dentro do container', function() {
-            expect($('.feed article').attr('class')).toEqual('entry');
+            expect($('.feed .entry').hasClass('entry')).toBe(true);
         })
     });
-    /* TODO: Write a new test suite named "New Feed Selection" */
+    /* TODO: Escreva um novo suite de teste com nome 'Nova seleção de feed' */
     describe('Nova seleção de feed', function() {
 
         let feed1;
         let feed2;
 
         beforeEach(function(done) {
+
+            loadFeed(1, function() {
+                feed1 = $('.feed .entry')[0];
+                done();
+            })
+
             loadFeed(0, function() {
-                feed1 = $('.feed article')[0];
-                feed2 = $('.feed article')[1];
+                feed2 = $('.feed .entry')[0];
                 done();
             })
         })
 
-        /* TODO: Write a test that ensures when a new feed is loaded
-         * by the loadFeed function that the content actually changes.
-         * Remember, loadFeed() is asynchronous.
+        /** TODO: Escreva um teste, para um novo carregamento de um feed.
+         * quando a função loadFeed() é chamada passamos um parametro para ele.
+         * loadFeed(params), quando passamos 0, 1 ... deve ser um novo feed carregado.
          */
         it('deve garantir que, quando um novo feed for carregado pela função loadFeed, o conteúdo realmente mude', function() {
             expect(feed1).not.toBe(feed2);
